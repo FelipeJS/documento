@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Documentos</title>
+</h:head>
+<h:body>
+	<h:form id="form">
+		<p:panel header="Gerenciador de Documentos">
+			<p:treeTable value="#{documentoBean.raiz}" var="documento" emptyMessage="Nenhum registro encontrado" paginator="true" rows="15">
+				<f:facet name="header">
+					<p:commandButton value="Nova Pasta" type="button" onclick="PF('cadastroPasta').show();" icon="ui-icon-folder-open" />
+				</f:facet>
+				
+				<p:column headerText="Oficio" sortBy="#{documento.oficio}" filterBy="#{documento.oficio}">
+					<h:outputText value="#{documento.oficio}" />
+				</p:column>
+				<p:column headerText="Assunto" sortBy="#{documento.assunto}" filterBy="#{documento.assunto}">
+					<h:outputText value="#{documento.assunto}" />
+				</p:column>
+				<p:column headerText="Descrição" sortBy="#{documento.descricao}" filterBy="#{documento.descricao}">
+					<h:outputText value="#{documento.descricao}" />
+				</p:column>
+				<p:column headerText="Data" sortBy="#{documento.data}" filterBy="#{documento.data}">
+					<h:outputText value="#{documento.data}" />
+				</p:column>
+				<p:column headerText="Status" sortBy="#{documento.status}" filterBy="#{documento.status}">
+					<h:outputText value="#{documento.status}" />
+				</p:column>
+				<p:column headerText="Tipo" sortBy="#{documento.tipo}" filterBy="#{documento.tipo}">
+					<h:outputText value="#{documento.tipo}" />
+				</p:column>
+
+				<p:column headerText="Ações">
+					<p:growl id="messages" showDetail="true" />
+					<p:menuButton value="Opções">
+						<p:menuitem value="Novo" actionListener="#{documentoBean.criar}" update="messages" icon="ui-icon-document" />
+						<p:menuitem value="Atualizar" actionListener="#{documentoBean.atualizar}" update="messages" icon="ui-icon-arrowrefresh-1-w" />
+						<p:menuitem value="Excluir" actionListener="#{documentoBean.excluir}" ajax="false" icon="ui-icon-close" />
+					</p:menuButton>
+				</p:column>
+			</p:treeTable>
+		</p:panel>
+	</h:form>
+
+	<p:dialog header="Cadastro" widgetVar="cadastroPasta" modal="true" draggable="false" resizable="false" closable="false">
+	    <h:form>
+	    	<h:panelGrid columns="2">
+		    	<p:outputLabel value="Oficio: " />
+		    	<p:inputText size="15" maxlength="30" />
+		    	
+		    	<p:outputLabel value="Assunto: " />
+		    	<p:inputText size="35" maxlength="200" />
+		    	
+		    	<p:outputLabel value="Descrição: " />
+		    	<p:inputTextarea cols="35" rows="3" />
+		    	
+		    	<p:outputLabel value="Data:" />
+        		<p:calendar id="mask" value="#{documentoBean.dataAtual}" pattern="dd-MM-yyyy HH:mm" mask="true" readonly="true" showOn="none"/>
+        		
+		    	<p:outputLabel value="Status: " />
+		        <p:selectOneMenu id="status" value="#{documentoBean.statusSelecionado}" style="width:125px">
+		            <f:selectItem itemLabel="Enviado" itemValue="enviado" />
+		            <f:selectItem itemLabel="Pendente" itemValue="pendente" />
+		            <f:selectItem itemLabel="Finalizado" itemValue="finalizado" />
+		            <f:selectItem itemLabel="Cancelado" itemValue="cancelado" />
+		        </p:selectOneMenu>
+		     </h:panelGrid>
+		     <p:panelGrid>
+		     	<p:commandButton value="Salvar" action="#{documentoBean.salvarPasta}"/>
+		     	<p:commandButton value="Cancelar" onclick="PF('cadastroPasta').hide();" />
+		     </p:panelGrid>   
+	    </h:form>
+	</p:dialog>   
+</h:body>
+</html>
